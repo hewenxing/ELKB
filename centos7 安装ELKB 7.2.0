@@ -1,0 +1,68 @@
+yum安装jdk1.8
+rpm -qa |grep java
+rpm -qa |grep jdk
+rpm -qa |grep gcj
+如果安装可以使用rpm -qa | grep java | xargs rpm -e --nodeps 批量卸载所有带有Java的文件
+yum list java-1.8*
+yum install java-1.8.0-openjdk* -y
+java -version
+cd /etc/yum.repos.d/
+
+vim ELK.repo
+[elasticsearch-7.x]
+name=Elasticsearch repository for 7.x packages
+baseurl=https://artifacts.elastic.co/packages/7.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+
+[kibana-7.x]
+name=Kibana repository for 7.x packages
+baseurl=https://artifacts.elastic.co/packages/7.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+
+[logstash-7.x]
+name=Elastic repository for 7.x packages
+baseurl=https://artifacts.elastic.co/packages/7.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+
+[elastic-7.x]
+name=Elastic repository for 7.x packages
+baseurl=https://artifacts.elastic.co/packages/7.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+
+sudo yum -y install kibana
+sudo yum -y install elasticsearch
+sudo yum -y install logstash
+sudo yum -y install filebeat
+groupadd elk
+useradd elk -g elk
+
+docker安装ELK
+Elasticsearch 需要java11
+删除自带的JDK1.8
+java -version
+rpm -qa | grep java
+rpm -e --nodeps java-1.8.0-openjdk-headless-1.8.0.212.b04-0.el7_6.x86_64
+
+yum安装java11
+sudo yum search java-11
+sudo yum install java-11-openjdk -y
+java -version
+
+sudo docker pull sebp/elk
+sudo docker run -p 5601:5601 -p 9200:9200 -p 5044:5044 -it --name elk sebp/elk
